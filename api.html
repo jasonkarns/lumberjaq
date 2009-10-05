@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="en-US" xml:lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Untitled Document</title>
+	</head>
+	<body>
+	    <dl>
+	        <dt id="log">log (object[, object, ...]) <a href="http://getfirebug.com/console.html#log" title="Firebug Console API">console.log</a></dt>
+            <dt id="debug">debug (object[, object, ...]) <a href="http://getfirebug.com/console.html#debug" title="Firebug Console API">console.debug</a></dt>
+            <dt id="info">info (object[, object, ...]) <a href="http://getfirebug.com/console.html#info" title="Firebug Console API">console.info</a></dt>
+            <dt id="warn">warn (object[, object, ...]) <a href="http://getfirebug.com/console.html#warn" title="Firebug Console API">console.warn</a></dt>
+            <dt id="error">error (object[, object, ...]) <a href="http://getfirebug.com/console.html#error" title="Firebug Console API">console.error</a></dt>
+            <dt id="assert">assert (expression[, object, ...]) <a href="http://getfirebug.com/console.html#assert" title="Firebug Console API">console.assert</a></dt>
+            <dd>
+                <p>All of the above console methods function nearly the same as their Firebug counterparts, but with one significant difference. If the method is called with any arguments, the Firebug counterpart method is called with the same arguments. (If called without arguments, this call is skipped). Then <samp>console.group()</samp> is called with the jQuery object as a parameter. Then the original method is invoked on each of the matched elements, and the grouping is closed.</p>
+                <dl>
+                    <dt>Example 1</dt>
+                    <dd>
+                        <pre><code class="javascript jquery-firebug">$(selector).log("jQuery is awesome!"); // this is equivalent to the following code:</code></pre>
+                        <pre><code class="javascript console-firebug">
+console.log("jQuery is awesome!");
+console.group($(selector));
+$(selector).each(function(){
+    console.log(this);
+});
+console.groupEnd();
+</code></pre>
+                    </dd>
+                    <dt>Example 2</dt>
+                    <dd>
+                        <pre><code class="javascript jquery-firebug">$(selector).log(); // this is equivalent to the following code:</code></pre>
+                        <pre><code class="javascript console-firebug">
+console.group($(selector));
+$(selector).each(function(){
+    console.log(this);
+});
+console.groupEnd();
+</code></pre>
+                    </dd>
+                </dl>
+                <p>An added feature is the ability to inspect the output of jQuery methods which do not return the jQuery object. Simply pass the method call, prefixed with a dot (.), including any arguments, as a string to the log method.</p>
+                <dl>
+                    <dt>Example 1</dt>
+                    <dd>
+                        <pre><code class="javascript jquery-firebug">$(selector).log(".attr('class')"); // this is equivalent to the following code:</code></pre>
+                        <pre><code class="javascript console-firebug">
+console.group($(selector).attr('class'));
+$(selector).each(function(){
+    console.log(this);
+});
+console.groupEnd();</code></pre>
+                    </dd>
+                </dl>
+            </dd>
+            <dt id="dir">dir (object[, object, ...]) <a href="http://getfirebug.com/console.html#dir" title="Firebug Console API">console.dir</a></dt>
+            <dt id="dirxml">dirxml (object[, object, ...]) <a href="http://getfirebug.com/console.html#dirxml" title="Firebug Console API">console.dirxml</a></dt>
+            <dd>
+                <p>These two methods function identically as the group above with another small difference. For each matched element in the jQuery object, <samp>group</samp> and <samp>groupEnd</samp> are called thus allowing the output (which is generally quite large) to be collapsed.</p>
+            </dd>
+            <dt id="trace">trace () <a href="http://getfirebug.com/console.html#trace" title="Firebug Console API">console.trace</a></dt>
+            <dd>
+                <p>This method functions identically to the Firebug method, however this called is wrapped in a <samp>group</samp>/<samp>groupEnd</samp> call thus allowing the output to be collapsed. The jQuery object as passed to the <samp>group</samp> method to allow inspection.</p>
+            </dd>
+            <dt id="group">group (object[, object, ...]) <a href="http://getfirebug.com/console.html#group" title="Firebug Console API">console.group</a></dt>
+            <dt id="groupEnd">groupEnd () <a href="http://getfirebug.com/console.html#groupEnd" title="Firebug Console API">console.groupEnd</a></dt>
+            <dd>
+                <p>Once again, this method functions nearly identical to its Firebug counterpart. Calling this method with arguments will print those arguments and begin a nested block for future statements (closed with <samp>groupEnd</samp>). However, calling this method without arguments will output the jQuery object before opening the block.</p>
+                <dl>
+                    <dt>Example 1</dt>
+                    <dd>
+                        <pre><code class="javascript jquery-firebug">$(selector).group(); // this is equivalent to the following code:</code></pre>
+                        <pre><code class="javascript console-firebug">console.group($(selector));</code></pre>
+                    </dd>
+                </dl>
+            </dd>
+            <dt id="time">time (name) <a href="http://getfirebug.com/console.html#time" title="Firebug Console API">console.time</a></dt>
+            <dt id="timeEnd">timeEnd () <a href="http://getfirebug.com/console.html#timeEnd" title="Firebug Console API">console.timeEnd</a></dt>
+            <dd>
+                <p>Similar to the <samp>group</samp> method, these methods function nearly identical to their Firebug counterpart. Calling <samp>time</samp> with arguments will begin a named timer. Calling <samp>timeEnd</samp> will print the time elapsed. Timers are named therefore multiple timers may be running simultaneously and they need not be ended in FIFO order. The only minor different with the Firebug method is that if called without arguments, the jQuery object is used as the timer name.</p>
+            </dd>
+            <dt id="profile">profile ([title]) <a href="http://getfirebug.com/console.html#profile" title="Firebug Console API">console.profile</a></dt>
+            <dt id="profileEnd">profileEnd () <a href="http://getfirebug.com/console.html#profileEnd" title="Firebug Console API">console.profileEnd</a></dt>
+            <dd>
+                <p>These methods function identically to their Firebug counterparts, however <samp>debug</samp> is called with the jQuery object (to facilitate inspection) immediately before the profile begins.</p>
+            </dd>
+            <dt id="count">count ([title]) <a href="http://getfirebug.com/console.html#count" title="Firebug Console API">console.count</a></dt>
+            <dd>
+                <p>This method is identical to the Firebug method.</p>
+            </dd>
+	    </dl>
+	</body>
+</html>

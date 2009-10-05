@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>jQuery.Firebug</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<!-- this stylesheet only used by jquery.firebug.js not jquery.firebuglite.js -->
+<script type="text/javascript" src="jquery-1.2.6.js"></script>
+<!--
+<script type="text/javascript" src="firebuglite/firebug.js"></script>
+<link rel="stylesheet" type="text/css" href="jquery.firebug.css" />
+
+<script type="text/javascript" src="firebuglite/firebug-lite-compressed.js"></script>
+<link type="text/css" rel="stylesheet" href="firebuglite/firebug-lite.css"/>
+-->
+<script type="text/javascript" src="jquery.firebug.js">({debug:true,lite:{minimized:false}})</script>
+<script type="text/javascript">
+/*global jQuery */
+jQuery(document).ready(function(){
+    var test = {
+        vars: {
+            nil: null,
+            arr1: new Array("one","two"),
+            arr2: ["key", "value"],
+            arr3: [],
+            str1: "string",
+            str2: new String("new string"),
+            fstr1: ["String: %s; Integer D: %d, Integer I: %i; Float: %f; Object: %o", 
+                    "string", 0, 7, 3.14159, {key:"value"}],
+            num1: 0,
+            num2: 7,
+            num3: 3.14159,
+            json1: {
+                "key": "Value",
+                test: 3
+            },
+            json2: {},
+            bool1: true,
+            bool2: new Boolean(),
+            date1: new Date(),
+            func1: function tempFunc(sel, arg){
+                $(sel).trace(arg);
+            }
+        },
+        invoke: function(selector, method, arg) {
+            if(arg.indexOf("apply-") === 0){
+                $(selector)[method].apply($(selector), test.vars[arg.substr(6)]);
+            }
+            else {
+                $(selector)[method](test.vars[arg]);            
+            }
+        },
+        assert: function(){
+            $("#tree").assert(false);
+        },
+        trace: function(){
+            $("#tree").trace();
+        },
+        group: function(){
+            $("h2").group("group test1");
+            test.log();
+            test.info();
+            test.warn();
+            test.error();
+            $("h2").groupEnd();
+            
+            $("h2").group("group test2").log("log").info("info").warn("warn").error("error").groupEnd();
+        },
+        time: function(){
+            $("h2").time("time test").log(test.vars.str1, test.vars.str2, test.vars.func1, test.vars.arr1, test.vars.arr2, test.vars.json1, test.vars.bool1, test.vars.bool2, test.vars.obj1).log("wait").timeEnd("time test");
+        },
+        profile: function(){
+            $("h2").profile("profile test").log(test.vars.str1, test.vars.str2, test.vars.func1, test.vars.arr1, test.vars.arr2, test.vars.json1, test.vars.bool1, test.vars.bool2, test.vars.obj1).log("wait").profileEnd();
+        },
+        count: function(){
+            $("#tree").count("count");
+        }
+    }
+    
+    $("#run").click(function(){
+        test.invoke($("#selector").val(), $("#method").val(), $("#arg").val());
+    });
+    
+    $("#btn").click(function(){
+        console.assert(4 == 5);
+    });
+    
+    $("#ajax").click(function(){
+        $.get("api.html");
+    });
+
+    $("#selector, #method, #arg").change(function(){
+        if(this.id == "arg"){
+            var attr = $("option:selected",this).attr("title");
+            var text = $("option:selected",this).text();
+            $("#src-"+ this.id).text(attr?attr:text);
+        }
+        else {
+            $("#src-"+ this.id).text($(this).val());
+        }
+    }).change();
+
+//    $("#trace").click(test.trace);
+//    $("#group").click(test.group);
+//    $("#time").click(test.time);
+//    $("#profile").click(test.profile);
+//    $("#count").click(test.count);
+});
+</script>
+</head>
+<body>
+<h1>test</h1>
+<h2 id="h2one">one</h2>
+<h2 class="some class">two</h2>
+<div id="tree">
+    <div>
+        <!--comment node-->
+        <?xml processing instruction node ?>
+        <!CDATA[[ some cdata ]]>
+        <p>
+            <span><code>span</code> 1</span>
+            <span><code>span</code> 2</span>
+        </p>
+    </div>
+</div>
+<h3>Tests</h3>
+<p id="source">
+    <code>$("</code>
+    <strong><code id="src-selector"></code></strong>
+    <code>").</code>
+    <code id="src-method"></code>
+    <code>(</code>
+    <em><code id="src-arg"></code></em>
+    <code>);</code>
+</p>
+<form action="">
+<fieldset>
+<label for="selector">Selector</label>
+<input type="text" id="selector" value="h2" />
+<label for="method">Method</label>
+<select id="method">
+    <option>log</option>
+    <option>debug</option>
+    <option>info</option>
+    <option>warn</option>
+    <option>error</option>
+    <option>assert</option>
+    <option>dir</option>
+    <option>dirxml</option>
+    <option>trace</option>
+    <option>group</option>
+    <option>groupEnd</option>
+    <option>time</option>
+    <option>timeEnd</option>
+    <option>profile</option>
+    <option>profileEnd</option>
+    <option>count</option>
+    <option>clear</option>
+</select>
+<label for="arg">Argument(s)</label>
+<select id="arg">
+    <option value="nil">null</option>
+    <option value="arr1">new Array("one","two")</option>
+    <option value="arr2">["key", "value"]</option>
+    <option value="str1">"string"</option>
+    <option value="str2">new String("new string")</option>
+    <option value="num1">0</option>
+    <option value="num2">7</option>
+    <option value="num3">3.14159</option>
+    <option value="json1">{"key": "Value", test: 3}</option>
+    <option value="bool1">true</option>
+    <option value="bool2">new Boolean()</option>
+    <option value="date1">new Date()</option>
+    <option value="func1">function tempFunc(){}</option>
+    <optgroup label="Complex">
+    <option value="apply-arr3" title=" ">No Arguments</option>
+    <option value="apply-fstr1" title='"String: %s; Integer D: %d, Integer I: %i; Float: %f; Object: %o", "string", 0, 7, 3.14159, {key:"value"}'>Formatted String</option>
+    <option value="apply-mix1">Mixed</option>
+    </optgroup>
+</select>
+<button id="run" type="button">Run Test</button>
+</fieldset>
+<fieldset>
+<button id="btn" type="button">Assert</button>
+<button id="ajax" type="button">Ajax</button>
+</fieldset>
+</form>
+</body>
+</html>
