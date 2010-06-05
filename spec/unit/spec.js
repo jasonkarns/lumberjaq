@@ -71,5 +71,14 @@ describe 'Lumberjaq'
         end
       end
     end
+    
+    describe 'with multiple params'
+      it 'should concat them to console'
+        window.mockConsole.should.receive('log').with_args("hello", " world #", 1)
+        window.el.log(function() {
+          return "hello"
+        }, " world #", 1)
+      end
+    end
   end
 end
