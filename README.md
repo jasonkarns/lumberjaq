@@ -6,22 +6,22 @@ Lumberjaq is an API wrapper for modern browsers that support javascript console 
 ## Usage
 
 Logging the current jquery object to console
-`$("#my_selector").find(".some_children").log().hide('slow');`
+    $("#my_selector").find(".some_children").log().hide('slow');
 
 Logging a string to console
-`$("#my_selector").log("Hello");`
+    $("#my_selector").log("Hello");
 
 Logging the result of a function (note: the function parameters are called in the context of the jquery object)
-`$("#my_selector").log(function() {
-  var els = []
-  $(this).each(function() {
-    els.push($(this).doSomethingNeat());
-  })
-  return els.join("\n");
-});`
+    $("#my_selector").log(function() {
+      var els = []
+      $(this).each(function() {
+        els.push($(this).doSomethingNeat());
+      })
+      return els.join("\n");
+    });
 
 Logging with multiple parameters
-`$("#my_selector").log("Hello", function() { return " World!"}, [1,2,3]);`
+    $("#my_selector").log("Hello", function() { return " World!"}, [1,2,3]);
 
 ## License
 
